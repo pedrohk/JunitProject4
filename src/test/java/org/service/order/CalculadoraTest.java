@@ -7,11 +7,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 public class CalculadoraTest {
 
@@ -43,7 +46,7 @@ public class CalculadoraTest {
     public void testSoma() {
         Calculadora calc = new Calculadora();
         int resultado = calc.soma(2, 3);
-        assertEquals(5, resultado); 
+        assertEquals(5, resultado);
     }
 
 
@@ -70,5 +73,42 @@ public class CalculadoraTest {
                 () -> assertEquals(numbers[3], 3),
                 () -> assertEquals(numbers[4], 4)
         );
+    }
+
+    @Test
+    void trueAssumption() {
+        assumeTrue(5 > 1);
+        assertEquals(5 + 2, 7);
+    }
+
+    @Test
+    void falseAssumption() {
+        assumeFalse(5 < 1);
+        assertEquals(5 + 2, 7);
+    }
+
+    @Test
+    void assumptionThat() {
+        String someString = "Just a string";
+        assumingThat(
+                someString.equals("Just a string"),
+                () -> assertEquals(2 + 2, 4)
+        );
+    }
+
+    @Test
+    void shouldThrowException() {
+        Throwable exception = assertThrows(UnsupportedOperationException.class, () -> {
+            throw new UnsupportedOperationException("Not supported");
+        });
+        assertEquals("Not supported", exception.getMessage());
+    }
+
+    @Test
+    void assertThrowsException() {
+        String str = null;
+        assertThrows(IllegalArgumentException.class, () -> {
+            Integer.valueOf(str);
+        });
     }
 }
