@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -58,5 +60,15 @@ public class CalculadoraTest {
         int[] esperado = {1, 2, 3};
         int[] real = {1, 2, 3};
         assertArrayEquals(esperado, real);
+    }
+
+    @Test
+    void groupAssertions() {
+        int[] numbers = {0, 1, 2, 3, 4};
+        assertAll("numbers",
+                () -> assertEquals(numbers[0], 0),
+                () -> assertEquals(numbers[3], 3),
+                () -> assertEquals(numbers[4], 4)
+        );
     }
 }
