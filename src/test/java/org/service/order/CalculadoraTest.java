@@ -6,7 +6,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.System.out;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,42 +24,45 @@ import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 public class CalculadoraTest {
 
+    private Calculadora calculadora;
+    private List<String> shoppingCart;
+
     @BeforeAll
     public static void beforeAll() {
-        System.out.println("Executado uma vez antes de todos os testes.");
+        out.println("Executado uma vez antes de todos os testes.");
     }
 
 
     @AfterAll
     public static void afterAll() {
-        System.out.println("Executado uma vez depois de todos os testes.");
+        out.println("Executado uma vez depois de todos os testes.");
     }
 
 
     @BeforeEach
     public void beforeEach() {
-        System.out.println("Executado antes de cada teste.");
+        calculadora = new Calculadora();
+        shoppingCart = new ArrayList<>();
+        out.println("Executado antes de cada teste.");
     }
 
 
     @AfterEach
     public void afterEach() {
-        System.out.println("Executado depois de cada teste.");
+        out.println("Executado depois de cada teste.");
     }
 
 
     @Test
     public void testSoma() {
-        Calculadora calc = new Calculadora();
-        int resultado = calc.soma(2, 3);
+        int resultado = calculadora.soma(2, 3);
         assertEquals(5, resultado);
     }
 
 
     @Test
     public void testSomaDiferente() {
-        Calculadora calc = new Calculadora();
-        int resultado = calc.soma(2, 3);
+        int resultado = calculadora.soma(2, 3);
         assertNotEquals(6, resultado);
     }
 
@@ -111,4 +120,27 @@ public class CalculadoraTest {
             Integer.valueOf(str);
         });
     }
+
+    @Test
+    void testDivisionByZero() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculadora.dividir(10, 0);
+        });
+        assertEquals("Cannot divide by zero", exception.getMessage());
+    }
+
+
+    @ParameterizedTest
+    @CsvSource({
+            "10, 5, 5",
+            "100, 20, 80",
+            "5, 5, 0",
+            "0, 0, 0"
+    })
+    void testSubtraction(int minuend, int subtrahend, int expectedResult) {
+        int actualResult = calculadora.subtrair(minuend, subtrahend);
+        assertEquals(expectedResult, actualResult,
+                () -> minuend + " - " + subtrahend + " should be " + expectedResult);
+    }
+
 }
