@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.junit.jupiter.api.Assumptions.assumingThat;
@@ -141,6 +142,33 @@ public class CalculadoraTest {
         int actualResult = calculadora.subtrair(minuend, subtrahend);
         assertEquals(expectedResult, actualResult,
                 () -> minuend + " - " + subtrahend + " should be " + expectedResult);
+    }
+
+    @Test
+    void testAddItemToShoppingCart() {
+        assertTrue(shoppingCart.isEmpty(), "Shopping cart should be empty initially");
+        shoppingCart.add("Laptop");
+        assertEquals(1, shoppingCart.size(), "Shopping cart should have 1 item");
+        assertTrue(shoppingCart.contains("Laptop"), "Shopping cart should contain Laptop");
+    }
+
+    @Test
+    void testComplexScenario() {
+        // Test addition
+        assertEquals(7, calculadora.soma(4, 3), "Addition test failed");
+
+        // Test subtraction
+        assertEquals(2, calculadora.subtrair(5, 3), "Subtraction test failed");
+
+        // Test adding multiple items to cart
+        shoppingCart.add("Mouse");
+        shoppingCart.add("Keyboard");
+        assertAll("Shopping Cart and Calculator Checks",
+                () -> assertEquals(2, shoppingCart.size(), "Shopping cart should have 2 items"),
+                () -> assertTrue(shoppingCart.contains("Mouse"), "Cart should contain Mouse"),
+                () -> assertTrue(shoppingCart.contains("Keyboard"), "Cart should contain Keyboard"),
+                () -> assertEquals(10.0, calculadora.dividir(100.0, 10.0), 0.001, "Division test failed")
+        );
     }
 
 }
