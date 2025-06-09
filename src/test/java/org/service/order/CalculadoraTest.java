@@ -154,13 +154,11 @@ public class CalculadoraTest {
 
     @Test
     void testComplexScenario() {
-        // Test addition
+
         assertEquals(7, calculadora.soma(4, 3), "Addition test failed");
 
-        // Test subtraction
         assertEquals(2, calculadora.subtrair(5, 3), "Subtraction test failed");
 
-        // Test adding multiple items to cart
         shoppingCart.add("Mouse");
         shoppingCart.add("Keyboard");
         assertAll("Shopping Cart and Calculator Checks",
