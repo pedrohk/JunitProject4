@@ -6,15 +6,19 @@ public class Calculadora {
         return a + b;
     }
 
-    int subtrair(int a, int b) {
+    public int subtrair(int a, int b) {
         return a - b;
     }
 
-    double dividir(double a, double b) {
+    public double dividir(double a, double b) {
         if (b == 0) {
             throw new IllegalArgumentException("Cannot divide by zero");
         }
         return a / b;
+    }
+
+    public int multiplicar(int a, int b) {
+        return a * b;
     }
 
 }

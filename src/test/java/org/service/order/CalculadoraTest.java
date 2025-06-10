@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -167,6 +168,47 @@ public class CalculadoraTest {
                 () -> assertTrue(shoppingCart.contains("Keyboard"), "Cart should contain Keyboard"),
                 () -> assertEquals(10.0, calculadora.dividir(100.0, 10.0), 0.001, "Division test failed")
         );
+    }
+
+    @Test
+    @DisplayName("Should multiply two positive numbers correctly")
+    void testMultiplyPositiveNumbers() {
+        int result = calculadora.multiplicar(5, 3);
+        assertEquals(15, result, "5 * 3 should be 15");
+    }
+
+    @Test
+    @DisplayName("Should multiply by zero correctly")
+    void testMultiplyByZero() {
+        int result = calculadora.multiplicar(10, 0);
+        assertEquals(0, result, "Any number multiplied by 0 should be 0");
+    }
+
+    @Test
+    @DisplayName("Should multiply negative numbers correctly")
+    void testMultiplyNegativeNumbers() {
+        int result = calculadora.multiplicar(-5, -3);
+        assertEquals(15, result, "-5 * -3 should be 15");
+    }
+
+    @Test
+    @DisplayName("Should multiply positive and negative numbers correctly")
+    void testMultiplyPositiveAndNegativeNumbers() {
+        int result1 = calculadora.multiplicar(5, -3);
+        assertEquals(-15, result1, "5 * -3 should be -15");
+
+        int result2 = calculadora.multiplicar(-5, 3);
+        assertEquals(-15, result2, "-5 * 3 should be -15");
+    }
+
+    @Test
+    @DisplayName("Should handle multiplication with one")
+    void testMultiplyByOne() {
+        int result1 = calculadora.multiplicar(7, 1);
+        assertEquals(7, result1, "7 * 1 should be 7");
+
+        int result2 = calculadora.multiplicar(1, 9);
+        assertEquals(9, result2, "1 * 9 should be 9");
     }
 
 }
