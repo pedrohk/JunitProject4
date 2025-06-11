@@ -211,4 +211,24 @@ public class CalculadoraTest {
         assertEquals(9, result2, "1 * 9 should be 9");
     }
 
+    @ParameterizedTest(name = "{0} * {1} = {2}")
+    @CsvSource({
+            "2, 3, 6",
+            "-2, 3, -6",
+            "2, -3, -6",
+            "-2, -3, 6",
+            "0, 5, 0",
+            "5, 0, 0",
+            "1, 100, 100",
+            "100, 1, 100"
+    })
+
+    @DisplayName("Parameterized multiplication tests with various inputs")
+    void testMultiplyWithCsvSource(int a, int b, int expectedResult) {
+        int actualResult = calculadora.multiplicar(a, b);
+        assertEquals(expectedResult, actualResult,
+                String.format("Expected %d * %d to be %d, but got %d", a, b, expectedResult, actualResult));
+    }
+
+
 }
