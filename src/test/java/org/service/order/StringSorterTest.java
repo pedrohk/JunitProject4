@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StringSorterTest {
     private StringSorter stringSorter;
@@ -31,5 +32,20 @@ public class StringSorterTest {
         List<String> expected = Collections.emptyList();
         List<String> actual = stringSorter.sortNaturally(input);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testSortNaturallySingleElement() {
+        List<String> input = Collections.singletonList("Hello");
+        List<String> expected = Collections.singletonList("Hello");
+        List<String> actual = stringSorter.sortNaturally(input);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+
+    void testSortNaturallyNullInput() {
+        List<String> actual = stringSorter.sortNaturally(null);
+        assertNull(actual);
     }
 }
