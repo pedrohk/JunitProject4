@@ -43,7 +43,6 @@ public class StringSorterTest {
     }
 
     @Test
-
     void testSortNaturallyNullInput() {
         List<String> actual = stringSorter.sortNaturally(null);
         assertNull(actual);
