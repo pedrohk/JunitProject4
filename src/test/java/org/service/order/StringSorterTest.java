@@ -47,4 +47,30 @@ public class StringSorterTest {
         List<String> actual = stringSorter.sortNaturally(null);
         assertNull(actual);
     }
+
+    @Test
+    void testSortCaseInsensitive() {
+        List<String> input = Arrays.asList("Banana", "apple", "Orange", "Grape", "Apple");
+        List<String> expected = Arrays.asList("apple", "Apple", "Banana", "Grape", "Orange");
+        List<String> actual = stringSorter.sortCaseInsensitive(input);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testSortByLength() {
+        List<String> input = Arrays.asList("kiwi", "apple", "a", "banana", "orange");
+        List<String> expected = Arrays.asList("a", "kiwi", "apple", "banana", "orange");
+        List<String> actual = stringSorter.sortByLength(input);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testSortByLengthWithTies() {
+        List<String> input = Arrays.asList("bird", "cat", "dog");
+        // When lengths are equal, natural order is used as a secondary sort criterion
+        List<String> expected = Arrays.asList("cat", "dog", "bird");
+        List<String> actual = stringSorter.sortByLength(input);
+        assertEquals(expected, actual);
+    }
+
 }
