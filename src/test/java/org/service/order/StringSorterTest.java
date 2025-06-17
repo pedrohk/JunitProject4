@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StringSorterTest {
     private StringSorter stringSorter;
@@ -67,10 +69,33 @@ public class StringSorterTest {
     @Test
     void testSortByLengthWithTies() {
         List<String> input = Arrays.asList("bird", "cat", "dog");
-        // When lengths are equal, natural order is used as a secondary sort criterion
         List<String> expected = Arrays.asList("cat", "dog", "bird");
         List<String> actual = stringSorter.sortByLength(input);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void testNaturalSortResultIsSorted() {
+        List<String> input = Arrays.asList("Banana", "apple", "Orange", "Grape", "Apple");
+        List<String> sortedList = stringSorter.sortNaturally(input);
+        assertIsSorted(sortedList, String::compareTo);
+    }
+
+    @Test
+    void testCaseInsensitiveSortResultIsSorted() {
+        List<String> input = Arrays.asList("Banana", "apple", "Orange", "Grape", "Apple");
+        List<String> sortedList = stringSorter.sortCaseInsensitive(input);
+        assertIsSorted(sortedList, String.CASE_INSENSITIVE_ORDER);
+    }
+
+    private <T> void assertIsSorted(List<T> list, Comparator<T> comparator) {
+        if (list == null || list.size() <= 1) {
+            return; 
+        }
+        for (int i = 0; i < list.size() - 1; i++) {
+            assertTrue(comparator.compare(list.get(i), list.get(i + 1)) <= 0,
+                    "List is not sorted at index " + i + ": " + list.get(i) + " vs " + list.get(i + 1));
+        }
     }
 
 }
