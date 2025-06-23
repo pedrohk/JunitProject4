@@ -12,8 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -66,7 +68,7 @@ public class UserServiceTest {
         assertEquals("User with email camila.rocha07@gmail.net already exists.", exception.getMessage());
 
         verify(userRepository, times(1)).findByEmail("camila.rocha07@gmail.net");
-        verify(userRepository, never()).save(any(User.class)); // Ensure save was NOT called
+        verify(userRepository, never()).save(any(User.class)); 
         verifyNoMoreInteractions(userRepository);
     }
 
@@ -83,4 +85,43 @@ public class UserServiceTest {
         assertEquals("User and email cannot be null or empty.", exception.getMessage());
         verifyNoInteractions(userRepository);
     }
+
+    @Test
+    void testCreateUserNullUserObject() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.createUser(null);
+        });
+
+        assertEquals("User and email cannot be null or empty.", exception.getMessage());
+        verifyNoInteractions(userRepository);
+    }
+
+    @Test
+    void testFindUserByIdFound() {
+        User foundUser = new User("456", "Rafael Nogueira Lima", "rafael.lima84@gmail.org");
+
+        when(userRepository.findById("456")).thenReturn(Optional.of(foundUser));
+        Optional<User> result = userService.findUserById("456");
+
+        assertTrue(result.isPresent());
+        assertEquals(foundUser, result.get());
+
+        verify(userRepository, times(1)).findById("456");
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    void testFindUserByIdNotFound() {
+
+        when(userRepository.findById("nonExistentId")).thenReturn(Optional.empty());
+
+        Optional<User> result = userService.findUserById("nonExistentId");
+
+        assertFalse(result.isPresent());
+        assertTrue(result.isEmpty());
+
+        verify(userRepository, times(1)).findById("nonExistentId");
+        verifyNoMoreInteractions(userRepository);
+    }
+
 }
