@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -123,5 +124,33 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findById("nonExistentId");
         verifyNoMoreInteractions(userRepository);
     }
+
+    @ParameterizedTest(name = "Should return empty Optional for null/empty/blank ID: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {"   ", "\t"})
+    void testFindUserByIdInvalidInput(String id) {
+        Optional<User> result = userService.findUserById(id);
+
+        assertFalse(result.isPresent());
+        verifyNoInteractions(userRepository);
+    }
+
+
+    @Test
+    void testDeleteUserSuccess() {
+        User userToDelete = new User("789", "Rafael Nogueira Lima", "rafael.lima84@gmail.org");
+
+        when(userRepository.findById("789")).thenReturn(Optional.of(userToDelete));
+        doNothing().when(userRepository).deleteById("789");
+
+        boolean deleted = userService.deleteUser("789");
+
+        assertTrue(deleted);
+
+        verify(userRepository, times(1)).findById("789");
+        verify(userRepository, times(1)).deleteById("789");
+        verifyNoMoreInteractions(userRepository);
+    }
+
 
 }
