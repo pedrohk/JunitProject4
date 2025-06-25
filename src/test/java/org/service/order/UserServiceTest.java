@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -151,6 +152,27 @@ public class UserServiceTest {
         verify(userRepository, times(1)).deleteById("789");
         verifyNoMoreInteractions(userRepository);
     }
+    @Test
+    void testDeleteUserNotFound() {
+        when(userRepository.findById("unknownId")).thenReturn(Optional.empty());
 
+        boolean deleted = userService.deleteUser("unknownId");
+
+        assertFalse(deleted);
+
+        verify(userRepository, times(1)).findById("unknownId");
+        verify(userRepository, never()).deleteById(anyString());
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @ParameterizedTest(name = "Should return false for null/empty/blank ID for delete: {0}")
+    @NullAndEmptySource
+    @ValueSource(strings = {"   ", "\t"})
+    void testDeleteUserInvalidInput(String id) {
+        boolean deleted = userService.deleteUser(id);
+
+        assertFalse(deleted);
+        verifyNoInteractions(userRepository);
+    }
 
 }
